@@ -1,0 +1,83 @@
+<html>
+	<head>
+		<title>Typing Test</title>
+		<link href="css/bootstrap.min.css" rel="stylesheet"></link>
+		<link rel="stylesheet" href="css/style.css" type="text/css"></link>
+	</head>
+	<body class="bg-primary">
+	<div class="container text-center">
+		<h1>Welcome to Typing Speed Test</h1>
+		<h2 id="message"></h2>
+		<textarea id="mywords" class="bg-dark" rows="12" cols="150" placeholder="Remember, be nice!" disabled></textarea>
+		<button class="btn btn-light" style="padding:10px 30px;" id="btnstart"><b>Start</b></button>
+	</div>
+	</body>
+	<script type="text/javascript">
+		const sentences = ["She is singing a song.","Kids are playing in the garden.","He will come here tomorrow.","The birds are flying in the sky.","What a pleasant weather!","It has been raining since 3 O’clock.","Where had you gone the last night?","He got admission in a new school.","There ten students in the classroom.","They bought a new computer."];
+		
+		const msg = document.getElementById("message");
+		const typedwords = document.getElementById("mywords");
+		const btn = document.getElementById("btnstart");
+		let starttime, endtime;
+		
+		const playgame = () =>
+		{
+			var num = Math.floor(Math.random()*sentences.length);
+			msg.innerText = sentences[num];
+			var d = new Date();
+			starttime = d.getTime();
+			btn.innerHTML = "<b>Done</b>";
+		}
+		
+		const endplay = () =>
+		{
+			var d = new Date();
+			endtime = d.getTime();
+			let totaltime = ((endtime-starttime)/1000);
+			let totstr = typedwords.value;
+			let wc = wordcounter(totstr);
+			let speed = Math.round((wc/totaltime)*60);
+			let finalmsg = "You typed total at "+speed+" words per minute. ";
+			finalmsg += comparewords(msg.innerText,totstr);
+			msg.innerText = finalmsg;
+		}
+		
+		const wordcounter = (str) =>
+		{
+			let resp = str.split(" ").length;
+			return resp;
+		}
+		
+		const comparewords = (str1,str2) =>
+		{
+			let w1 = str1.split(" ");
+			let w2 = str2.split(" ");
+			let c = 0;
+			for(var i=0;i<w1.length;i++)
+			{
+				if(w1[i] == w2[i])
+				{
+					c++;
+				}
+			}
+			let errorwords = (w1.length - c);
+			return (c+" correct out of "+w1.length+" words and the total number of errors are "+errorwords+".");
+		}
+		
+		btn.addEventListener('click',function()
+		{
+			if(this.innerText == 'Start')
+			{
+				typedwords.disabled = false;
+				playgame();
+			}
+			else if(this.innerText == 'Done')
+			{
+				typedwords.disabled = true;
+				btn.innerHTML = "<b>Start</b>";
+				endplay();
+				typedwords.value = "";
+			}
+		});
+	</script>
+</html>
